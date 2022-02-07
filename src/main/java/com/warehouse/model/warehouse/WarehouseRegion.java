@@ -1,4 +1,4 @@
-package com.warehouse.model.wh;
+package com.warehouse.model.warehouse;
 
 public enum WarehouseRegion {
 
