@@ -2,7 +2,7 @@ package com.warehouse.util;
 
 public class UserQueryUtil {
 
-    public static final String SAVE_USER = "INSERT INTO users (user_role, user_name, surname, email, year_of_birth, " +
+    public static final String INSERT_USER = "INSERT INTO users (user_role, user_name, surname, email, year_of_birth, " +
             "place_of_birth, current_position, address_of_living) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String UPDATE_USER = "UPDATE users SET user_role = ?, user_name = ?, surname = ?, email = ?, year_of_birth = ?, " +

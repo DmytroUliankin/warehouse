@@ -26,16 +26,16 @@ public class UserJdbcImplementation implements UserRepository {
     public void saveUser(User user) {
         log.info("Starting saving user");
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(UserQueryUtil.SAVE_USER)) {
-                preparedStatement.setString(2, "user_role");
-                preparedStatement.setString(3, "user_name");
-                preparedStatement.setString(4, "surname");
-                preparedStatement.setString(5, "email");
-                preparedStatement.setString(6, "year_of_birth");
-                preparedStatement.setString(7, "place_of_birth");
-                preparedStatement.setString(8, "current_position");
-                preparedStatement.setString(9, "address_of_living");
-                preparedStatement.execute();
+            try (PreparedStatement saveUserPreparedStatement = connection.prepareStatement(UserQueryUtil.INSERT_USER)) {
+                saveUserPreparedStatement.setString(2, "user_role");
+                saveUserPreparedStatement.setString(3, "user_name");
+                saveUserPreparedStatement.setString(4, "surname");
+                saveUserPreparedStatement.setString(5, "email");
+                saveUserPreparedStatement.setString(6, "year_of_birth");
+                saveUserPreparedStatement.setString(7, "place_of_birth");
+                saveUserPreparedStatement.setString(8, "current_position");
+                saveUserPreparedStatement.setString(9, "address_of_living");
+                saveUserPreparedStatement.execute();
                 log.info("User saved. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                 " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
                         user.getRole(), user.getName(), user.getSurname(), user.getEmail(), user.getYearOfBirth(),
@@ -54,17 +54,17 @@ public class UserJdbcImplementation implements UserRepository {
     @Override
     public User updateUser(User user) {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement update = connection.prepareStatement(UserQueryUtil.UPDATE_USER)) {
-                update.setLong(1, user.getId());
-                update.setString(2, String.valueOf(user.getRole()));
-                update.setString(3, user.getName());
-                update.setString(4, user.getSurname());
-                update.setString(5, user.getEmail());
-                update.setString(6, user.getYearOfBirth());
-                update.setString(7, user.getPlaceOfBirth());
-                update.setString(8, user.getCurrentPosition());
-                update.setString(9, user.getCurrentPosition());
-                int updatedUser = update.executeUpdate();
+            try (PreparedStatement updateUserPreparedStatement = connection.prepareStatement(UserQueryUtil.UPDATE_USER)) {
+                updateUserPreparedStatement.setLong(1, user.getId());
+                updateUserPreparedStatement.setString(2, String.valueOf(user.getRole()));
+                updateUserPreparedStatement.setString(3, user.getName());
+                updateUserPreparedStatement.setString(4, user.getSurname());
+                updateUserPreparedStatement.setString(5, user.getEmail());
+                updateUserPreparedStatement.setString(6, user.getYearOfBirth());
+                updateUserPreparedStatement.setString(7, user.getPlaceOfBirth());
+                updateUserPreparedStatement.setString(8, user.getCurrentPosition());
+                updateUserPreparedStatement.setString(9, user.getCurrentPosition());
+                int updatedUser = updateUserPreparedStatement.executeUpdate();
                 if (updatedUser > 0) {
                     log.info("User updated. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                     " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
@@ -88,9 +88,9 @@ public class UserJdbcImplementation implements UserRepository {
         log.info("Start finding user by id");
         User user = new User();
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement get = connection.prepareStatement(UserQueryUtil.SELECT_USER_BY_ID);
-            get.setLong(1, id);
-            try (ResultSet getUser = get.executeQuery()) {
+            PreparedStatement getUserPreparedStatement = connection.prepareStatement(UserQueryUtil.SELECT_USER_BY_ID);
+            getUserPreparedStatement.setLong(1, id);
+            try (ResultSet getUser = getUserPreparedStatement.executeQuery()) {
                 while (getUser.next()) {
                     user.setId(getUser.getLong("id"));
                     user.setName(getUser.getString("user_name"));
@@ -123,9 +123,9 @@ public class UserJdbcImplementation implements UserRepository {
         log.info("Start deleting user by id");
         User user = new User();
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UserQueryUtil.DELETE_USER);
-            preparedStatement.setLong(1, id);
-            try (ResultSet deleteUser = preparedStatement.executeQuery()) {
+            PreparedStatement deleteUserPreparedStatement = connection.prepareStatement(UserQueryUtil.DELETE_USER);
+            deleteUserPreparedStatement.setLong(1, id);
+            try (ResultSet deleteUser = deleteUserPreparedStatement.executeQuery()) {
                 while (deleteUser.next()) {
                     user.setId(deleteUser.getLong("id"));
                     user.setName(deleteUser.getString("user_name"));
@@ -159,8 +159,8 @@ public class UserJdbcImplementation implements UserRepository {
         User user = new User();
         List<User> users = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UserQueryUtil.SELECT_ALL_USERS);
-            try (ResultSet allUsers = preparedStatement.executeQuery()) {
+            PreparedStatement getAllUsersPreparedStatement = connection.prepareStatement(UserQueryUtil.SELECT_ALL_USERS);
+            try (ResultSet allUsers = getAllUsersPreparedStatement.executeQuery()) {
                 while (allUsers.next()) {
                     user.setId(allUsers.getLong("id"));
                     user.setName(allUsers.getString("user_name"));
