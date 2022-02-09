@@ -1,13 +1,11 @@
 package com.warehouse.repository;
 
 import com.warehouse.model.user.User;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
-@Profile("jdbc")
+@Repository
 public interface UserRepository {
 
     void saveUser(User user);
