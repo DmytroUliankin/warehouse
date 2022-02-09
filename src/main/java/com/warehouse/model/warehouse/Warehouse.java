@@ -14,7 +14,7 @@ public class Warehouse {
     @NonNull
     private Long id;
 
-    private String number;
+    private Long number;
 
     private String name;
 
