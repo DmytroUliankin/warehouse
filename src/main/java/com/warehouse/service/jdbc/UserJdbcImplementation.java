@@ -27,14 +27,7 @@ public class UserJdbcImplementation implements UserRepository {
         log.info("Starting saving user");
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement saveUserPreparedStatement = connection.prepareStatement(UserQueryUtil.INSERT_USER)) {
-                saveUserPreparedStatement.setString(2, "user_role");
-                saveUserPreparedStatement.setString(3, "user_name");
-                saveUserPreparedStatement.setString(4, "surname");
-                saveUserPreparedStatement.setString(5, "email");
-                saveUserPreparedStatement.setString(6, "year_of_birth");
-                saveUserPreparedStatement.setString(7, "place_of_birth");
-                saveUserPreparedStatement.setString(8, "current_position");
-                saveUserPreparedStatement.setString(9, "address_of_living");
+                setPreparedStatement(user, saveUserPreparedStatement);
                 saveUserPreparedStatement.execute();
                 log.info("User saved. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                 " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
@@ -55,14 +48,7 @@ public class UserJdbcImplementation implements UserRepository {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement updateUserPreparedStatement = connection.prepareStatement(UserQueryUtil.UPDATE_USER)) {
                 updateUserPreparedStatement.setLong(1, user.getId());
-                updateUserPreparedStatement.setString(2, String.valueOf(user.getRole()));
-                updateUserPreparedStatement.setString(3, user.getName());
-                updateUserPreparedStatement.setString(4, user.getSurname());
-                updateUserPreparedStatement.setString(5, user.getEmail());
-                updateUserPreparedStatement.setString(6, user.getYearOfBirth());
-                updateUserPreparedStatement.setString(7, user.getPlaceOfBirth());
-                updateUserPreparedStatement.setString(8, user.getCurrentPosition());
-                updateUserPreparedStatement.setString(9, user.getCurrentPosition());
+                setPreparedStatement(user, updateUserPreparedStatement);
                 int updatedUser = updateUserPreparedStatement.executeUpdate();
                 if (updatedUser > 0) {
                     log.info("User updated. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
@@ -90,14 +76,7 @@ public class UserJdbcImplementation implements UserRepository {
             getUserPreparedStatement.setLong(1, id);
             try (ResultSet getUser = getUserPreparedStatement.executeQuery()) {
                 while (getUser.next()) {
-                    user.setId(getUser.getLong("id"));
-                    user.setName(getUser.getString("user_name"));
-                    user.setSurname(getUser.getString("surname"));
-                    user.setEmail(getUser.getString("email"));
-                    user.setYearOfBirth(getUser.getString("year_of_birth"));
-                    user.setPlaceOfBirth(getUser.getString("place_of_birth"));
-                    user.setCurrentPosition(getUser.getString("current_position"));
-                    user.setCurrentPosition(getUser.getString("address_of_living"));
+                    setUser(user, getUser);
                     log.info("User founded. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                     " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
                             user.getRole(), user.getName(), user.getSurname(), user.getEmail(), user.getYearOfBirth(),
@@ -124,14 +103,7 @@ public class UserJdbcImplementation implements UserRepository {
             deleteUserPreparedStatement.setLong(1, id);
             try (ResultSet deleteUser = deleteUserPreparedStatement.executeQuery()) {
                 while (deleteUser.next()) {
-                    user.setId(deleteUser.getLong("id"));
-                    user.setName(deleteUser.getString("user_name"));
-                    user.setSurname(deleteUser.getString("surname"));
-                    user.setEmail(deleteUser.getString("email"));
-                    user.setYearOfBirth(deleteUser.getString("year_of_birth"));
-                    user.setPlaceOfBirth(deleteUser.getString("place_of_birth"));
-                    user.setCurrentPosition(deleteUser.getString("current_position"));
-                    user.setCurrentPosition(deleteUser.getString("address_of_living"));
+                    setUser(user, deleteUser);
                     log.info("User deleted. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                     " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
                             user.getRole(), user.getName(), user.getSurname(), user.getEmail(), user.getYearOfBirth(),
@@ -158,14 +130,7 @@ public class UserJdbcImplementation implements UserRepository {
             PreparedStatement getAllUsersPreparedStatement = connection.prepareStatement(UserQueryUtil.SELECT_ALL_USERS);
             try (ResultSet allUsers = getAllUsersPreparedStatement.executeQuery()) {
                 while (allUsers.next()) {
-                    user.setId(allUsers.getLong("id"));
-                    user.setName(allUsers.getString("user_name"));
-                    user.setSurname(allUsers.getString("surname"));
-                    user.setEmail(allUsers.getString("email"));
-                    user.setYearOfBirth(allUsers.getString("year_of_birth"));
-                    user.setPlaceOfBirth(allUsers.getString("place_of_birth"));
-                    user.setCurrentPosition(allUsers.getString("current_position"));
-                    user.setCurrentPosition(allUsers.getString("address_of_living"));
+                    setUser(user, allUsers);
                     log.info("Users found. User role: {}, name: {}, surname: {}, email: {}, yearOfBirth:{}," +
                                     " placeOfBirth: {}, currentPosition: {}, addressOfLiving:{}",
                             user.getRole(), user.getName(), user.getSurname(), user.getEmail(), user.getYearOfBirth(),
@@ -182,6 +147,28 @@ public class UserJdbcImplementation implements UserRepository {
         }
         log.info("End finding users");
         return users;
+    }
+
+    private void setUser(User user, ResultSet allUsers) throws SQLException {
+        user.setId(allUsers.getLong("user_id"));
+        user.setName(allUsers.getString("user_name"));
+        user.setSurname(allUsers.getString("surname"));
+        user.setEmail(allUsers.getString("email"));
+        user.setYearOfBirth(allUsers.getString("year_of_birth"));
+        user.setPlaceOfBirth(allUsers.getString("place_of_birth"));
+        user.setCurrentPosition(allUsers.getString("current_position"));
+        user.setCurrentPosition(allUsers.getString("address_of_living"));
+    }
+
+    private void setPreparedStatement(User user, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(2, String.valueOf(user.getRole()));
+        preparedStatement.setString(3, user.getName());
+        preparedStatement.setString(4, user.getSurname());
+        preparedStatement.setString(5, user.getEmail());
+        preparedStatement.setString(6, user.getYearOfBirth());
+        preparedStatement.setString(7, user.getPlaceOfBirth());
+        preparedStatement.setString(8, user.getCurrentPosition());
+        preparedStatement.setString(9, user.getAddressOfLiving());
     }
 
 }
