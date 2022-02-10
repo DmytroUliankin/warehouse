@@ -41,12 +41,11 @@ public class UserJdbcImplementation implements UserRepository {
                         user.getRole(), user.getName(), user.getSurname(), user.getEmail(), user.getYearOfBirth(),
                         user.getPlaceOfBirth(), user.getCurrentPosition(), user.getAddressOfLiving());
             } catch (SQLException e) {
-                log.error("Can't save user", e);
-                log.error("Can't prepare statement", e);
+                log.error("Can't prepare statement to save user: ", e);
                 throw new RuntimeException();
             }
         } catch (SQLException e) {
-            log.error("Can't open connection", e);
+            log.error("Can't open connection to save user: ", e);
             throw new RuntimeException();
         }
     }
@@ -72,12 +71,11 @@ public class UserJdbcImplementation implements UserRepository {
                             user.getPlaceOfBirth(), user.getCurrentPosition(), user.getAddressOfLiving());
                 }
             } catch (SQLException e) {
-                log.error("Can't update user", e);
-                log.error("Can't prepare statement", e);
+                log.error("Can't prepare statement to update user: ", e);
                 throw new RuntimeException();
             }
         } catch (SQLException e) {
-            log.error("Can't open connection", e);
+            log.error("Can't open connection to update user: ", e);
             throw new RuntimeException();
         }
         return user;
@@ -106,12 +104,11 @@ public class UserJdbcImplementation implements UserRepository {
                             user.getPlaceOfBirth(), user.getCurrentPosition(), user.getAddressOfLiving());
                 }
             } catch (SQLException e) {
-                log.error("Can't find user", e);
-                log.error("Can't prepare statement", e);
+                log.error("Can't prepare statement to find user by id: ", e);
                 throw new RuntimeException();
             }
         } catch (SQLException e) {
-            log.error("Can't open connection", e);
+            log.error("Can't open connection to find user by id: ", e);
             throw new RuntimeException();
         }
         log.info("End finding user by id ");
@@ -141,12 +138,11 @@ public class UserJdbcImplementation implements UserRepository {
                             user.getPlaceOfBirth(), user.getCurrentPosition(), user.getAddressOfLiving());
                 }
             } catch (SQLException e) {
-                log.error("Can't delete user", e);
-                log.error("Can't prepare statement", e);
+                log.error("Can't prepare statement to delete user: ", e);
                 throw new RuntimeException();
             }
         } catch (SQLException e) {
-            log.error("Can't open connection", e);
+            log.error("Can't open connection to delete user: ", e);
             throw new RuntimeException();
         }
         log.info("End finding user by id ");
@@ -177,12 +173,11 @@ public class UserJdbcImplementation implements UserRepository {
                 }
                 users.add(user);
             } catch (SQLException e) {
-                log.error("Can't find users", e);
-                log.error("Can't prepare statement", e);
+                log.error("Can't prepare statement to find all users: ", e);
                 throw new RuntimeException();
             }
         } catch (SQLException e) {
-            log.error("Can't open connection", e);
+            log.error("Can't open connection to find all users: ", e);
             throw new RuntimeException();
         }
         log.info("End finding users");
