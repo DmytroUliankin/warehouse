@@ -41,10 +41,10 @@ public class UserJdbcRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(Long id, User user) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement updateUserPreparedStatement = connection.prepareStatement(UserQueryUtil.UPDATE_USER)) {
-            updateUserPreparedStatement.setLong(1, user.getId());
+            updateUserPreparedStatement.setLong(1, id);
             populateParams(user, updateUserPreparedStatement);
             int updatedUser = updateUserPreparedStatement.executeUpdate();
             if (updatedUser > 0) {
