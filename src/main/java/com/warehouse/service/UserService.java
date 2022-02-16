@@ -1,36 +1,19 @@
 package com.warehouse.service;
 
 import com.warehouse.model.user.User;
-import com.warehouse.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class UserService implements UserOperations {
+public interface UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    void saveUser(User user);
 
-    public void saveUser(User user) {
-        userRepository.saveUser(user);
-    }
+    User updateUser(User user);
 
-    public User updateUser(User user) {
-        return userRepository.updateUser(user);
-    }
+    User getUser(Long id);
 
-    public User getUser(Long id) {
-        return userRepository.getUser(id);
-    }
+    User deleteUser(Long id);
 
-    public User deleteUser(Long id) {
-        return userRepository.deleteUser(id);
-    }
-
-    public List<User> getUsers() {
-        return userRepository.getUsers();
-    }
+    List<User> getUsers();
 
 }

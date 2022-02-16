@@ -1,11 +1,9 @@
 package com.warehouse.repository;
 
 import com.warehouse.model.user.User;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface UserRepository {
 
     void saveUser(User user);
